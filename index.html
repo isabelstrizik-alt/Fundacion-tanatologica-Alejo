@@ -25,7 +25,11 @@
       margin:0;
       font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
       color:var(--ink);
-      background:var(--ivory);
+      /* AQUÍ APLICAMOS EL FONDO A TODA LA WEB (puedes ajustar la opacidad con un tinte si lo deseas) */
+      background: linear-gradient(rgba(246, 240, 230, 0.92), rgba(246, 240, 230, 0.92)), url('img/fondo-reconocimientos.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
       line-height:1.6;
     }
     a{color:inherit;text-decoration:none}
@@ -47,45 +51,22 @@
     .brand-copy{min-width:0}
     .brand-title{font-family:Georgia,serif;color:var(--chocolate);font-size:17px;font-weight:600;white-space:nowrap}
     .brand-copy small{display:block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:700}
-    .menu{display:flex;gap:26px;font-size:14px;color:#4d403a;white-space:nowrap}
-    .menu a:hover{color:var(--gold)}
 
     .hero{
       position:relative;overflow:hidden;
       padding:92px 0 82px;
-      background:
-        radial-gradient(circle at 82% 22%,rgba(185,154,94,.22),transparent 27%),
-        radial-gradient(circle at 70% 75%,rgba(76,47,38,.08),transparent 30%),
-        linear-gradient(135deg,#fffaf4 0%,#f5eadc 100%);
     }
     .hero-grid{display:grid;grid-template-columns:1.12fr .88fr;gap:60px;align-items:center;position:relative;z-index:1}
     .eyebrow{text-transform:uppercase;letter-spacing:.24em;font-size:12px;color:var(--gold);font-weight:800;margin-bottom:18px}
     h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(44px,7vw,78px);line-height:1.02;margin:0 0 24px;color:var(--chocolate);font-weight:500}
     .lead{font-size:20px;max-width:680px;color:#574840;margin-bottom:28px}
-    .hero-quote{font-family:Georgia,serif;font-size:24px;line-height:1.45;color:var(--chocolate-2);margin:26px 0 32px;max-width:670px}
-    .actions{display:flex;flex-wrap:wrap;gap:14px}
-    .btn{display:inline-flex;align-items:center;justify-content:center;padding:14px 20px;border-radius:999px;font-weight:700;font-size:14px;border:1px solid transparent;transition:.2s ease}
-    .btn-primary{background:var(--chocolate);color:white;box-shadow:0 10px 24px rgba(76,47,38,.18)}
-    .btn-primary:hover{transform:translateY(-1px);background:#3f271f}
-    .btn-secondary{border-color:rgba(76,47,38,.24);color:var(--chocolate);background:rgba(255,255,255,.45)}
 
     section{padding:80px 0}
     .section-kicker{font-size:12px;text-transform:uppercase;letter-spacing:.22em;color:var(--gold);font-weight:800;margin-bottom:10px}
     .section-title{font-family:Georgia,serif;color:var(--chocolate);font-size:42px;line-height:1.15;margin:0 0 18px;font-weight:500}
     .section-intro{max-width:760px;color:var(--muted);font-size:18px;margin-bottom:36px}
 
-    /* ======================================================= */
-    /* NUEVA SECCIÓN: TESTIMONIOS (TIPO YOUTUBE CON FONDO JPG) */
-    /* ======================================================= */
-    .testimonios-section {
-  background-image: url('img/fondo-reconocimientos.jpg'); /* Apunta directo a la carpeta img/ */
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  padding: 80px 0;
-  width: 100%;
-}
-
+    /* ESTILOS DE TESTIMONIOS (TIPO YOUTUBE) */
     .video-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -111,7 +92,7 @@
     .video-thumbnail-container {
       position: relative;
       width: 100%;
-      aspect-ratio: 9/16; /* Formato vertical tipo Short / TikTok */
+      aspect-ratio: 9/16;
       background: #000;
       cursor: pointer;
     }
@@ -149,7 +130,7 @@
     }
 
     .video-thumbnail-container:hover .play-button {
-      background: #ff0000; /* Estilo rojo YouTube */
+      background: #ff0000;
       transform: translate(-50%, -50%) scale(1.1);
     }
 
@@ -179,7 +160,8 @@
   <header class="topbar">
     <div class="container nav">
       <a class="brand" href="#inicio">
-        <div class="brand-mark">A</div>
+        <!-- Ejemplo de uso de tu logotipo guardado en la carpeta img -->
+        <img src="img/Logo Fundacion.png" alt="Logo Fundación" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
         <div class="brand-copy">
           <div class="brand-title">Fundación Tanatológica Alejo</div>
           <small>duelo · acompañamiento · trascendencia</small>
@@ -205,16 +187,30 @@
       <div class="section-kicker">Filosofía</div>
       <h2 class="section-title">Nuestra mirada</h2>
       <p class="section-intro">Aquí se encuentra la visión de nuestro espacio y la contención comunitaria...</p>
+      
+      <!-- Ejemplo para mostrar las fotos de los integrantes guardadas en img/ -->
+      <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 30px;">
+        <div style="text-align: center;">
+          <img src="img/Isabel Elisa Strizik.png" alt="Isabel Elisa Strizik" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold);">
+          <p style="font-size: 14px; margin-top: 8px; font-weight: 600;">Isabel Elisa Strizik</p>
+        </div>
+        <div style="text-align: center;">
+          <img src="img/Agustin Kossoy Strizik.png" alt="Agustin Kossoy Strizik" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold);">
+          <p style="font-size: 14px; margin-top: 8px; font-weight: 600;">Agustin Kossoy Strizik</p>
+        </div>
+        <div style="text-align: center;">
+          <img src="img/Denis Bulan.png" alt="Denis Bulan" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold);">
+          <p style="font-size: 14px; margin-top: 8px; font-weight: 600;">Denis Bulan</p>
+        </div>
+      </div>
     </section>
 
-    <!-- ======================================================= -->
-    <!-- SECCIÓN TESTIMONIOS (UBICADA ENTRE NUESTRA MIRADA Y ABRAZOS) -->
-    <!-- ======================================================= -->
-    <section id="testimonios" class="testimonios-section">
-      <div class="container" style="text-align: center;">
-        <div class="section-kicker" style="color: #fff7ec;">Comunidad</div>
-        <h2 class="section-title" style="color: #fff; margin-bottom: 10px;">Testimonios</h2>
-        <p class="section-intro" style="color: #f1dfbb; margin: 0 auto 40px auto;">Experiencias y reflexiones compartidas en nuestra comunidad.</p>
+    <!-- SECCIÓN TESTIMONIOS -->
+    <section id="testimonios" class="container">
+      <div style="text-align: center;">
+        <div class="section-kicker">Comunidad</div>
+        <h2 class="section-title" style="margin-bottom: 10px;">Testimonios</h2>
+        <p class="section-intro" style="margin: 0 auto 40px auto; text-align: center;">Experiencias y reflexiones compartidas en nuestra comunidad.</p>
         
         <div class="video-grid">
           
