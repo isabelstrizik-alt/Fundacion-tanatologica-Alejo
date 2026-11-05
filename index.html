@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Fundación Tanatológica Alejo. Acompañamiento humano en procesos de duelo, encuentros, recursos y conversaciones sobre la muerte y la trascendencia." />
+  <title>Fundación Tanatológica Alejo</title>
+  <style>
+    :root{
+      --ivory:#f6f0e6;
+      --paper:#fffaf3;
+      --chocolate:#4c2f26;
+      --chocolate-2:#6d4739;
+      --gold:#b99a5e;
+      --gold-soft:#d8c08d;
+      --ink:#2e2521;
+      --muted:#786a63;
+      --line:rgba(76,47,38,.14);
+      --shadow:0 18px 40px rgba(76,47,38,.10);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--ink);
+      background:var(--ivory);
+      line-height:1.6;
+    }
+    a{color:inherit;text-decoration:none}
+    .container{width:min(1120px,calc(100% - 36px));margin:0 auto}
+
+    .topbar{
+      position:sticky;top:0;z-index:30;
+      backdrop-filter:blur(14px);
+      background:rgba(246,240,230,.94);
+      border-bottom:1px solid var(--line);
+    }
+    .nav{display:flex;align-items:center;justify-content:space-between;min-height:76px;gap:24px;position:relative}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:700;letter-spacing:.02em;min-width:0}
+    .brand-mark{
+      width:44px;height:44px;border-radius:50%;display:grid;place-items:center;flex:0 0 auto;
+      border:1px solid rgba(185,154,94,.55);color:var(--gold);
+      font-family:Georgia,serif;font-size:24px;background:rgba(255,255,255,.38);
+    }
+    .brand-copy{min-width:0}
+    .brand-title{font-family:Georgia,serif;color:var(--chocolate);font-size:17px;font-weight:600;white-space:nowrap}
+    .brand-copy small{display:block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:700}
+    .menu{display:flex;gap:26px;font-size:14px;color:#4d403a;white-space:nowrap}
+    .menu a:hover{color:var(--gold)}
+
+    .hero{
+      position:relative;overflow:hidden;
+      padding:92px 0 82px;
+      background:
+        radial-gradient(circle at 82% 22%,rgba(185,154,94,.22),transparent 27%),
+        radial-gradient(circle at 70% 75%,rgba(76,47,38,.08),transparent 30%),
+        linear-gradient(135deg,#fffaf4 0%,#f5eadc 100%);
+    }
+    .hero-grid{display:grid;grid-template-columns:1.12fr .88fr;gap:60px;align-items:center;position:relative;z-index:1}
+    .eyebrow{text-transform:uppercase;letter-spacing:.24em;font-size:12px;color:var(--gold);font-weight:800;margin-bottom:18px}
+    h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(44px,7vw,78px);line-height:1.02;margin:0 0 24px;color:var(--chocolate);font-weight:500}
+    .lead{font-size:20px;max-width:680px;color:#574840;margin-bottom:28px}
+    .hero-quote{font-family:Georgia,serif;font-size:24px;line-height:1.45;color:var(--chocolate-2);margin:26px 0 32px;max-width:670px}
+    .actions{display:flex;flex-wrap:wrap;gap:14px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;padding:14px 20px;border-radius:999px;font-weight:700;font-size:14px;border:1px solid transparent;transition:.2s ease}
+    .btn-primary{background:var(--chocolate);color:white;box-shadow:0 10px 24px rgba(76,47,38,.18)}
+    .btn-primary:hover{transform:translateY(-1px);background:#3f271f}
+    .btn-secondary{border-color:rgba(76,47,38,.24);color:var(--chocolate);background:rgba(255,255,255,.45)}
+
+    section{padding:80px 0}
+    .section-kicker{font-size:12px;text-transform:uppercase;letter-spacing:.22em;color:var(--gold);font-weight:800;margin-bottom:10px}
+    .section-title{font-family:Georgia,serif;color:var(--chocolate);font-size:42px;line-height:1.15;margin:0 0 18px;font-weight:500}
+    .section-intro{max-width:760px;color:var(--muted);font-size:18px;margin-bottom:36px}
+
+    /* ======================================================= */
+    /* NUEVA SECCIÓN: TESTIMONIOS (TIPO YOUTUBE CON FONDO JPG) */
+    /* ======================================================= */
+    .testimonios-section {
+  background-image: url('img/fondo-reconocimientos.jpg'); /* Apunta directo a la carpeta img/ */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 80px 0;
+  width: 100%;
+}
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 25px;
+      justify-items: center;
+    }
+
+    .youtube-card {
+      background: #ffffff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 260px;
+      text-align: left;
+      transition: transform 0.3s ease;
+    }
+
+    .youtube-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .video-thumbnail-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 9/16; /* Formato vertical tipo Short / TikTok */
+      background: #000;
+      cursor: pointer;
+    }
+
+    .video-thumbnail {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .play-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 50px;
+      height: 50px;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .play-button::after {
+      content: "";
+      display: block;
+      width: 0;
+      height: 0;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      border-left: 16px solid #ffffff;
+      margin-left: 4px;
+    }
+
+    .video-thumbnail-container:hover .play-button {
+      background: #ff0000; /* Estilo rojo YouTube */
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    .video-iframe-wrapper {
+      display: none;
+      width: 100%;
+      height: 100%;
+    }
+
+    .video-info {
+      padding: 12px;
+    }
+
+    .video-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #222;
+      margin: 0;
+    }
+
+    footer{background:#2f1e19;color:#d9ccc4;padding:34px 0;font-size:13px; text-align: center;}
+  </style>
+</head>
+<body>
+
+  <!-- ENCABEZADO -->
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="#inicio">
+        <div class="brand-mark">A</div>
+        <div class="brand-copy">
+          <div class="brand-title">Fundación Tanatológica Alejo</div>
+          <small>duelo · acompañamiento · trascendencia</small>
+        </div>
+      </a>
+    </div>
+  </header>
+
+  <main id="inicio">
+    <!-- PORTADA -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow">Fundación Tanatológica Alejo</div>
+          <h1>Rompamos el silencio.<br>Hablemos de la muerte.</h1>
+          <p class="lead">Acompañamos el duelo con humanidad, escucha y sentido.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- NUESTRA MIRADA -->
+    <section id="nuestra-mirada" class="container">
+      <div class="section-kicker">Filosofía</div>
+      <h2 class="section-title">Nuestra mirada</h2>
+      <p class="section-intro">Aquí se encuentra la visión de nuestro espacio y la contención comunitaria...</p>
+    </section>
+
+    <!-- ======================================================= -->
+    <!-- SECCIÓN TESTIMONIOS (UBICADA ENTRE NUESTRA MIRADA Y ABRAZOS) -->
+    <!-- ======================================================= -->
+    <section id="testimonios" class="testimonios-section">
+      <div class="container" style="text-align: center;">
+        <div class="section-kicker" style="color: #fff7ec;">Comunidad</div>
+        <h2 class="section-title" style="color: #fff; margin-bottom: 10px;">Testimonios</h2>
+        <p class="section-intro" style="color: #f1dfbb; margin: 0 auto 40px auto;">Experiencias y reflexiones compartidas en nuestra comunidad.</p>
+        
+        <div class="video-grid">
+          
+          <!-- Testimonio 1 -->
+          <div class="youtube-card">
+            <div class="video-thumbnail-container" onclick="reproducirVideo(this)">
+              <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500&auto=format&fit=crop&q=60" alt="Miniatura 1" class="video-thumbnail">
+              <div class="play-button"></div>
+              <div class="video-iframe-wrapper">
+                <blockquote class="tiktok-embed" cite="https://vt.tiktok.com/ZSg3C2rWP/" data-video-id="ZSg3C2rWP" style="max-width: 605px;min-width: 325px;"> <section> </section> </blockquote>
+              </div>
+            </div>
+            <div class="video-info">
+              <p class="video-title">Testimonio 1</p>
+            </div>
+          </div>
+
+          <!-- Testimonio 2 -->
+          <div class="youtube-card">
+            <div class="video-thumbnail-container" onclick="reproducirVideo(this)">
+              <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500&auto=format&fit=crop&q=60" alt="Miniatura 2" class="video-thumbnail">
+              <div class="play-button"></div>
+              <div class="video-iframe-wrapper">
+                <blockquote class="tiktok-embed" cite="https://vt.tiktok.com/ZSg3X57S6/" data-video-id="ZSg3X57S6" style="max-width: 605px;min-width: 325px;"> <section> </section> </blockquote>
+              </div>
+            </div>
+            <div class="video-info">
+              <p class="video-title">Testimonio 2</p>
+            </div>
+          </div>
+
+          <!-- Testimonio 3 -->
+          <div class="youtube-card">
+            <div class="video-thumbnail-container" onclick="reproducirVideo(this)">
+              <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500&auto=format&fit=crop&q=60" alt="Miniatura 3" class="video-thumbnail">
+              <div class="play-button"></div>
+              <div class="video-iframe-wrapper">
+                <blockquote class="tiktok-embed" cite="https://vt.tiktok.com/ZSg3qAoYn/" data-video-id="ZSg3qAoYn" style="max-width: 605px;min-width: 325px;"> <section> </section> </blockquote>
+              </div>
+            </div>
+            <div class="video-info">
+              <p class="video-title">Testimonio 3</p>
+            </div>
+          </div>
+
+          <!-- Testimonio 4 -->
+          <div class="youtube-card">
+            <div class="video-thumbnail-container" onclick="reproducirVideo(this)">
+              <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500&auto=format&fit=crop&q=60" alt="Miniatura 4" class="video-thumbnail">
+              <div class="play-button"></div>
+              <div class="video-iframe-wrapper">
+                <blockquote class="tiktok-embed" cite="https://vt.tiktok.com/ZSg3s1j3g/" data-video-id="ZSg3s1j3g" style="max-width: 605px;min-width: 325px;"> <section> </section> </blockquote>
+              </div>
+            </div>
+            <div class="video-info">
+              <p class="video-title">Testimonio 4</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ABRAZOS DE ESPERANZA -->
+    <section id="abrazos-esperanza" class="container">
+      <div class="section-kicker">Comunidad</div>
+      <h2 class="section-title">Abrazos de esperanza</h2>
+      <p class="section-intro">Espacio dedicado a mensajes de unión, contención y apoyo mutuo...</p>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Fundación Tanatológica Alejo &copy; 2026</p>
+    </div>
+  </footer>
+
+  <!-- SCRIPT PARA REPRODUCIR LOS VIDEOS SIN SALIR DEL SITIO -->
+  <script async src="https://www.tiktok.com/embed.js"></script>
+  <script>
+    function reproducirVideo(elemento) {
+      const img = elemento.querySelector('.video-thumbnail');
+      const btn = elemento.querySelector('.play-button');
+      const wrapper = elemento.querySelector('.video-iframe-wrapper');
+
+      if (img) img.style.display = 'none';
+      if (btn) btn.style.display = 'none';
+      if (wrapper) wrapper.style.display = 'block';
+    }
+  </script>
+</body>
+</html>
