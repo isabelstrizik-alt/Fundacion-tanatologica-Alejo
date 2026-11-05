@@ -215,4 +215,443 @@
   min-width:0;
 }
 .family-member{
-  padding:2
+  padding:26px;
+  background:var(--paper);
+  border:1px solid rgba(185,154,94,.42);
+  border-radius:24px;
+  box-shadow:var(--shadow);
+}
+.family-head{
+  display:grid;
+  grid-template-columns:112px minmax(0,1fr);
+  gap:18px;
+  align-items:center;
+  margin-bottom:20px;
+}
+.family-photo{
+  display:block;
+  width:112px;
+  height:140px;
+  border-radius:16px;
+  overflow:hidden;
+  background:var(--ivory);
+  object-fit:cover;
+}
+.family-member h3{
+  font-family:Georgia,serif;
+  font-size:25px;
+  line-height:1.2;
+  color:var(--chocolate);
+  font-weight:500;
+  margin:0 0 10px;
+}
+.family-role{
+  font-size:13px;
+  color:var(--muted);
+  margin:0;
+}
+.family-member p:not(.family-role){
+  font-size:16px;
+  color:#65574f;
+  margin:0 0 16px;
+}
+.family-member blockquote{
+  font-family:Georgia,serif;
+  font-size:20px;
+  line-height:1.5;
+  font-style:italic;
+  color:var(--chocolate-2);
+  margin:22px 0 0;
+  padding-top:18px;
+  border-top:1px solid var(--line);
+}
+@media(max-width:620px){
+  .family-head{
+    grid-template-columns:96px minmax(0,1fr);
+    gap:14px;
+  }
+  .family-photo{width:96px;height:120px}
+  .family-member h3{font-size:23px}
+}
+</style>
+<!-- ================= BLOQUE 02 | FIN: ESTILOS DE INTEGRANTES Y FAMILIA ================= -->
+<!-- ================= BLOQUE 03 | INICIO: AJUSTES DE RETRATOS Y MUSICA ================= -->
+<style id="ajustes-retratos-y-musica">
+/* Retratos completos, sin el recorte de las capturas del teléfono. */
+.profile-head,.family-head{
+  display:grid;
+  grid-template-columns:128px minmax(0,1fr);
+  gap:20px;
+  align-items:center;
+  margin-bottom:24px;
+}
+.profile-head > div,.family-head > div{min-width:0}
+.profile-head h3,.family-head h3{overflow-wrap:anywhere}
+.profile-head .profile-role{margin-bottom:0}
+.person-photo,.family-photo{
+  display:block;
+  width:128px;
+  height:160px;
+  border-radius:18px;
+  object-fit:contain;
+  object-position:center center;
+  background:#f6f0e6;
+  border:1px solid rgba(185,154,94,.22);
+}
+.youtube-player{
+  display:block;
+  width:100%;
+  aspect-ratio:16/9;
+  min-height:200px;
+  border:0;
+  border-radius:12px;
+}
+.video-external{
+  display:inline-block;
+  margin-top:12px;
+  color:inherit;
+  font-size:13px;
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+.music-toggle{
+  position:fixed;
+  right:max(18px,env(safe-area-inset-right));
+  bottom:max(18px,env(safe-area-inset-bottom));
+  z-index:40;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  min-height:46px;
+  max-width:calc(100vw - 28px);
+  padding:12px 17px;
+  border:1px solid #d8c08d;
+  border-radius:999px;
+  background:#4c2f26;
+  color:#fffaf3;
+  box-shadow:0 6px 22px rgba(47,30,25,.2);
+  font:600 13px/1.3 ui-sans-serif,system-ui,sans-serif;
+  cursor:pointer;
+}
+.music-toggle:hover{background:#6d4739}
+.music-toggle:focus-visible{outline:3px solid #b99a5e;outline-offset:4px}
+.music-toggle svg{width:19px;height:19px;flex:0 0 19px}
+.music-toggle [hidden]{display:none!important}
+footer{padding-bottom:98px}
+@media(max-width:620px){
+  .profile-head,.family-head{
+    grid-template-columns:96px minmax(0,1fr);
+    gap:14px;
+  }
+  .person-photo,.family-photo{width:96px;height:120px;border-radius:14px}
+  .profile-head h3{font-size:27px}
+  .family-head h3{font-size:23px}
+  .music-toggle{right:14px;bottom:max(14px,env(safe-area-inset-bottom));padding:11px 14px}
+}
+</style>
+<!-- ================= BLOQUE 03 | FIN: AJUSTES DE RETRATOS Y MUSICA ================= -->
+</head>
+<body>
+<!-- ================= BLOQUE 04 | INICIO: ENCABEZADO Y NAVEGACION ================= -->
+<header class="topbar">
+  <div class="container nav">
+    <a class="brand" href="#inicio" aria-label="Fundación Tanatológica Alejo">
+      <div class="brand-mark">A</div>
+      <div class="brand-copy">
+        <div class="brand-title">Fundación Tanatológica Alejo</div>
+        <small>duelo · acompañamiento · trascendencia</small>
+      </div>
+    </a>
+    <nav class="menu" aria-label="Navegación principal">
+      <a href="#fundacion">La Fundación</a>
+      <a href="#acompanamiento">Acompañamiento</a>
+      <a href="#alejo">Alejo</a>
+      <a href="#recursos">Recursos</a>
+      <a href="#quienes-somos">Quiénes somos</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <button class="menu-btn" id="menuBtn" aria-label="Abrir menú" aria-expanded="false">☰</button>
+  </div>
+</header>
+<!-- ================= BLOQUE 04 | FIN: ENCABEZADO Y NAVEGACION ================= -->
+<!-- ================= BLOQUE 05 | INICIO: MENU MOVIL ================= -->
+<div class="mobile-panel" id="mobilePanel" aria-hidden="true">
+  <nav aria-label="Navegación móvil">
+    <a href="#fundacion">La Fundación</a>
+    <a href="#acompanamiento">Acompañamiento</a>
+    <a href="#alejo">Alejo</a>
+    <a href="#recursos">Recursos</a>
+    <a href="#quienes-somos">Quiénes somos</a>
+    <a href="#contacto">Contacto</a>
+  </nav>
+</div>
+<!-- ================= BLOQUE 05 | FIN: MENU MOVIL ================= -->
+
+<main id="inicio">
+<!-- ================= BLOQUE 06 | INICIO: PORTADA Y LEMA ================= -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="eyebrow">Fundación Tanatológica Alejo</div>
+        <h1>Rompamos el silencio.<br>Hablemos de la muerte.</h1>
+        <p class="lead">Acompañamos el duelo con humanidad, escucha y sentido. Hablamos de la ausencia, del amor que permanece y de cómo volver a vivir de otra manera.</p>
+        <div class="hero-quote">“Nacer y morir son hechos naturales de la vida. Hay muertes para las que nadie está preparado.”</div>
+        <div class="actions">
+          <a class="btn btn-primary" href="#acompanamiento">Encontrá acompañamiento</a>
+          <a class="btn btn-secondary" href="#fundacion">Conocé la Fundación</a>
+        </div>
+      </div>
+      <div class="identity-card" aria-label="Símbolo de Fundación Tanatológica Alejo">
+        <div class="identity-mark" aria-hidden="true">
+          <div class="identity-ring">
+            <img class="identity-logo" src="img/logo.jpg" alt="Logo Fundación Alejo" />
+          </div>
+        </div>
+        <div class="identity-copy">
+          <strong>Una presencia que transforma.</strong>
+          <span>Una identidad inspirada en Alejo: memoria, amor y una sonrisa que sigue acompañando.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+<!-- ================= BLOQUE 06 | FIN: PORTADA Y LEMA ================= -->
+
+<!-- ================= BLOQUE 07 | INICIO: LA FUNDACION Y SU EQUIPO ================= -->
+  <section id="fundacion">
+    <div class="container">
+      <div class="section-kicker">La Fundación</div>
+      <h2 class="section-title">Un lugar para nombrar lo que duele y sostener lo que permanece.</h2>
+      <div class="foundation-layout">
+        <div>
+          <p class="section-intro">La Fundación Tanatológica Alejo nace para acompañar a personas y familias atravesadas por una pérdida, abrir conversación sobre la muerte y ofrecer herramientas para reconstruir sentido.</p>
+          <div class="about-grid">
+            <div class="panel">
+              <h3>Nuestra misión</h3>
+              <p>Acompañar el duelo desde una mirada humana, respetuosa y consciente, con escucha, encuentros, formación y recursos.</p>
+            </div>
+            <div class="panel">
+              <h3>Nuestra mirada</h3>
+              <p>No buscamos borrar la ausencia. Buscamos aprender a vivir con ella, reconocer el amor que continúa y abrir un camino posible hacia adelante.</p>
+            </div>
+          </div>
+        </div>
+        <div class="team-column">
+<!-- ================= BLOQUE 07A | INICIO: QUIENES SOMOS - ISABEL ================= -->
+          <aside class="profile-card" id="quienes-somos" aria-labelledby="profile-name">
+            <div class="section-kicker">Quiénes somos</div>
+            <div class="profile-head">
+              <img class="person-photo" src="img/isabel.jpg" alt="Retrato de Isabel" />
+              <div>
+                <h3 id="profile-name">Isabel Strizik</h3>
+                <p class="profile-role">Fundadora y Coordinadora</p>
+              </div>
+            </div>
+            <div class="profile-credentials">
+              <div class="profile-degree">Especialista en Tanatología y Acompañamiento en Duelo</div>
+              <div class="profile-institution">Fundación Tanatológica Alejo</div>
+              <p class="profile-professions">Acompañamiento terapéutico, contención familiar y espacios de escucha en procesos de pérdida.</p>
+            </div>
+            <p class="profile-story">Trabajamos desde la convicción de que el dolor compartido se transforma. Nuestro espacio ofrece contención profesional y humana para transitar los momentos más difíciles de la vida.</p>
+            <div class="profile-signature">Isabel Strizik</div>
+          </aside>
+<!-- ================= BLOQUE 07A | FIN: QUIENES SOMOS - ISABEL ================= -->
+
+<!-- ================= BLOQUE 07B | INICIO: INTEGRANTE - DENIS BULAN ================= -->
+          <article class="family-member">
+            <div class="family-head">
+              <img class="family-photo" src="img/denis.jpg" alt="Retrato de Denis Bulan" />
+              <div>
+                <h3>Denis Bulan</h3>
+                <p class="family-role">Colaboración y Soporte Institucional</p>
+              </div>
+            </div>
+            <p>Acompañando activamente los valores y el compromiso humano de la fundación en cada iniciativa.</p>
+            <blockquote>“Estar presentes y sostener el espacio con empatía es una forma de mantener viva la memoria y el sentido.”</blockquote>
+          </article>
+<!-- ================= BLOQUE 07B | FIN: INTEGRANTE - DENIS BULAN ================= -->
+
+<!-- ================= BLOQUE 07C | INICIO: INTEGRANTE - AGUSTIN KOSSOY STRIZIK ================= -->
+          <article class="family-member">
+            <div class="family-head">
+              <img class="family-photo" src="img/agustin.jpg" alt="Retrato de Agustín Kossoy Strizik" />
+              <div>
+                <h3>Agustín Kossoy Strizik</h3>
+                <p class="family-role">Equipo y Desarrollo</p>
+              </div>
+            </div>
+            <p>Comprometido con el desarrollo técnico y la difusión de este espacio de contención y crecimiento comunitario.</p>
+            <blockquote>“Construir herramientas digitales que acerquen calidez humana y faciliten el encuentro es fundamental para nuestra comunidad.”</blockquote>
+          </article>
+<!-- ================= BLOQUE 07C | FIN: INTEGRANTE - AGUSTIN KOSSOY STRIZIK ================= -->
+        </div>
+      </div>
+    </div>
+  </section>
+<!-- ================= BLOQUE 07 | FIN: LA FUNDACION Y SU EQUIPO ================= -->
+
+<!-- ================= BLOQUE 08 | INICIO: ACOMPANAMIENTO Y SERVICIOS ================= -->
+  <section id="acompanamiento" class="services">
+    <div class="container">
+      <div class="section-kicker">Acompañamiento</div>
+      <h2 class="section-title">Espacios de escucha, contención y saberes compartidos.</h2>
+      <p class="section-intro">Brindamos diferentes modalidades de apoyo adaptadas a cada necesidad y momento del proceso de duelo.</p>
+      <div class="cards">
+        <div class="card">
+          <div class="num">01</div>
+          <h3>Grupos de Duelo</h3>
+          <p>Encuentros mensuales de escucha mutua y contención entre pares que transitan experiencias similares.</p>
+        </div>
+        <div class="card">
+          <div class="num">02</div>
+          <h3>Acompañamiento Individual</h3>
+          <p>Espacios personalizados de orientación tanatológica y contención emocional en un marco de respeto y confidencialidad.</p>
+        </div>
+        <div class="card">
+          <div class="num">03</div>
+          <h3>Talleres y Charlas</h3>
+          <p>Jornadas abiertas a la comunidad para reflexionar, resignificar y hablar sin tabúes sobre la muerte y el proceso vital.</p>
+        </div>
+        <div class="card">
+          <div class="num">04</div>
+          <h3>Biblioteca y Recursos</h3>
+          <p>Acceso a textos, guías, artículos y material seleccionado sobre duelo, tanatología y acompañamiento.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+<!-- ================= BLOQUE 08 | FIN: ACOMPANAMIENTO Y SERVICIOS ================= -->
+
+<!-- ================= BLOQUE 09 | INICIO: SECCION ALEJO ================= -->
+  <section id="alejo" class="alejo">
+    <div class="container">
+      <div class="alejo-grid">
+        <div class="alejo-visual" aria-label="Imagen conmemorativa de Alejo">
+          <img class="alejo-photo" src="img/alejo.jpg" alt="Alejo" />
+          <div class="alejo-label">Alejo · Memoria y Luz</div>
+        </div>
+        <div class="alejo-media">
+          <div class="section-kicker">Su Memoria</div>
+          <h2 class="section-title">El motor de nuestra misión</h2>
+          <div class="alejo-copy">
+            <p>Alejo nos enseñó que la profundidad de una vida no se mide por su duración, sino por el amor que deja sembrado a su paso. Su luz sigue inspirando cada paso de esta fundación.</p>
+            <div class="alejo-highlight">“El amor trasciende la ausencia y se convierte en presencia eterna en el corazón de quienes lo recuerdan.”</div>
+            <div class="signature">Alejo</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+<!-- ================= BLOQUE 09 | FIN: SECCION ALEJO ================= -->
+
+<!-- ================= BLOQUE 10 | INICIO: RECURSOS Y VIDEOS ================= -->
+  <section id="recursos">
+    <div class="container">
+      <div class="section-kicker">Recursos y Contenidos</div>
+      <h2 class="section-title">Material audiovisual y reflexiones</h2>
+      <p class="section-intro">Compartimos videos, conferencias y material de interés para profundizar en el camino de la tanatología.</p>
+      <div class="about-grid">
+        <div class="panel">
+          <h3>Espacio Audiovisual</h3>
+          <p>Conferencias y charlas abiertas sobre el proceso de duelo y la importancia de la palabra.</p>
+          <div class="alejo-music-player" style="margin-top:20px;">
+            <iframe class="youtube-player" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Video de la Fundación" allowfullscreen></iframe>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Lecturas Recomendadas</h3>
+          <p>Artículos y selecciones bibliográficas para acompañar la comprensión del dolor y la reconstrucción vital.</p>
+          <div style="margin-top:20px;">
+            <p style="margin-bottom:12px;"><strong>Guía de primeros auxilios emocionales en el duelo</strong><br><span style="font-size:14px; color:var(--muted);">Orientaciones prácticas para los momentos iniciales de una pérdida significativa.</span></p>
+            <p><strong>Hablar con niños sobre la muerte</strong><br><span style="font-size:14px; color:var(--muted);">Herramientas para abordar el tema con honestidad y contención afectiva.</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+<!-- ================= BLOQUE 10 | FIN: RECURSOS Y VIDEOS ================= -->
+
+<!-- ================= BLOQUE 11 | INICIO: BANDA DE CITA ================= -->
+  <section class="quote-band">
+    <div class="container">
+      <blockquote>“No se olvida a quien se ama; se aprende a amar su ausencia.”</blockquote>
+      <p>Fundación Tanatológica Alejo</p>
+    </div>
+  </section>
+<!-- ================= BLOQUE 11 | FIN: BANDA DE CITA ================= -->
+
+<!-- ================= BLOQUE 12 | INICIO: CONTACTO ================= -->
+  <section id="contacto">
+    <div class="container">
+      <div class="section-kicker">Contacto</div>
+      <h2 class="section-title">Estamos para escucharte</h2>
+      <p class="section-intro">Si necesitás orientación, querés sumarte a los grupos o tenés alguna consulta, podés comunicarte con nosotros.</p>
+      <div class="contact-grid">
+        <div class="contact-box">
+          <h3>Canales de Comunicación</h3>
+          <div class="contact-list">
+            <div class="contact-item"><strong>Correo electrónico:</strong> contacto@fundacionalego.org</div>
+            <div class="contact-item"><strong>Atención:</strong> Lunes a viernes con cita previa</div>
+            <div class="contact-item"><strong>Modalidad:</strong> Encuentros presenciales y virtuales</div>
+          </div>
+        </div>
+        <div class="contact-box">
+          <h3>Envianos un mensaje</h3>
+          <form style="display:grid; gap:14px; margin-top:18px;" onsubmit="event.preventDefault(); alert('Mensaje enviado con éxito.');">
+            <div>
+              <label style="display:block; font-size:13px; font-weight:600; margin-bottom:5px;" for="nombre">Nombre</label>
+              <input type="text" id="nombre" required style="width:100%; padding:10px 14px; border:1px solid var(--line); border-radius:10px; background:var(--ivory);" />
+            </div>
+            <div>
+              <label style="display:block; font-size:13px; font-weight:600; margin-bottom:5px;" for="email">Correo electrónico</label>
+              <input type="email" id="email" required style="width:100%; padding:10px 14px; border:1px solid var(--line); border-radius:10px; background:var(--ivory);" />
+            </div>
+            <div>
+              <label style="display:block; font-size:13px; font-weight:600; margin-bottom:5px;" for="mensaje">Mensaje</label>
+              <textarea id="mensaje" rows="3" required style="width:100%; padding:10px 14px; border:1px solid var(--line); border-radius:10px; background:var(--ivory);"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="justify-self:start;">Enviar mensaje</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+<!-- ================= BLOQUE 12 | FIN: CONTACTO ================= -->
+</main>
+
+<!-- ================= BLOQUE 13 | INICIO: PIE DE PAGINA ================= -->
+<footer>
+  <div class="container footer-inner">
+    <div class="footer-name">Fundación Tanatológica Alejo</div>
+    <div>Acompañamiento en duelo, memoria y sentido.</div>
+  </div>
+</footer>
+<!-- ================= BLOQUE 13 | FIN: PIE DE PAGINA ================= -->
+
+<!-- ================= SCRIPT DE INTERACTIVIDAD (MENU MOVIL) ================= -->
+<script>
+  const menuBtn = document.getElementById('menuBtn');
+  const mobilePanel = document.getElementById('mobilePanel');
+  
+  if(menuBtn && mobilePanel){
+    menuBtn.addEventListener('click', () => {
+      const isOpen = mobilePanel.classList.toggle('open');
+      menuBtn.setAttribute('aria-expanded', isOpen);
+      mobilePanel.setAttribute('aria-hidden', !isOpen);
+      document.body.classList.toggle('menu-open', isOpen);
+      menuBtn.textContent = isOpen ? '✕' : '☰';
+    });
+
+    mobilePanel.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobilePanel.classList.remove('open');
+        mobilePanel.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('menu-open');
+        menuBtn.setAttribute('aria-expanded', 'false');
+        menuBtn.textContent = '☰';
+      });
+    });
+  }
+</script>
+</body>
+</html>
