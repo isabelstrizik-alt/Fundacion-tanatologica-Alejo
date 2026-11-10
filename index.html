@@ -27,6 +27,10 @@
             html = html.split(placeholder).join(path);
           }
 
+          const logoMarkup =
+            '<div class="brand-mark"><img src="img/Logo%20Fundacion.png" alt="Logo Fundación Tanatológica Alejo" style="width:100%;height:100%;object-fit:contain;border-radius:50%;" /></div>';
+          html = html.split('<div class="brand-mark">A</div>').join(logoMarkup);
+
           document.open();
           document.write(html);
           document.close();
