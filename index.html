@@ -27,6 +27,55 @@
             html = html.split(placeholder).join(path);
           }
 
+          // Pegá solamente el enlace de cada video en estos seis lugares.
+          const videoLinks = [
+            "(PEGAR LINK)", // Video 1
+            "(PEGAR LINK)", // Video 2
+            "(PEGAR LINK)", // Video 3
+            "(PEGAR LINK)", // Video 4
+            "(PEGAR LINK)", // Video 5
+            "(PEGAR LINK)"  // Video 6
+          ];
+
+          function escaparHTML(valor) {
+            return String(valor).replace(/[&<>"']/g, caracter => ({
+              '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[caracter]));
+          }
+
+          function obtenerVideoInfo(enlace) {
+            try {
+              const url = new URL(enlace);
+              const host = url.hostname.replace(/^www\./, '');
+              let id;
+              if (host === 'youtu.be') {
+                id = url.pathname.split('/').filter(Boolean)[0];
+                if (id) return {
+                  plataforma: 'youtube',
+                  embed: `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1&playsinline=1&rel=0`,
+                  portada: `https://img.youtube.com/vi/${encodeURIComponent(id)}/hqdefault.jpg`
+                };
+              }
+              if (host === 'youtube.com' || host === 'm.youtube.com' || host === 'youtube-nocookie.com') {
+                id = url.searchParams.get('v') || url.pathname.match(/\/(?:embed|shorts|live)\/([^/?]+)/)?.[1];
+                if (id) return {
+                  plataforma: 'youtube',
+                  embed: `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1&playsinline=1&rel=0`,
+                  portada: `https://img.youtube.com/vi/${encodeURIComponent(id)}/hqdefault.jpg`
+                };
+              }
+              if (host === 'tiktok.com' || host.endsWith('.tiktok.com')) {
+                id = url.pathname.match(/\/video\/(\d+)/)?.[1];
+                if (id) return {
+                  plataforma: 'tiktok',
+                  embed: `https://www.tiktok.com/player/v1/${id}?autoplay=1`,
+                  portada: ''
+                };
+              }
+            } catch (error) { /* Enlace vacío o con formato no válido. */ }
+            return null;
+          }
+
           const testimonios = `
             <section class="testimonios" aria-labelledby="testimonios-titulo">
               <div class="testimonios-encabezado">
@@ -35,30 +84,24 @@
                 <p>Historias de familias que encuentran maneras de seguir viviendo y llevando consigo el amor.</p>
               </div>
               <div class="testimonios-grid">
-                <article class="testimonio-card">
-                  <div class="testimonio-portada">
-                    <img src="(PEGAR LINK)" alt="Imagen de portada del testimonio 1" loading="lazy" decoding="async" />
-                    <span class="testimonio-portada-placeholder">(PEGAR LINK de imagen de portada)</span>
-                    <button class="testimonio-play" type="button" data-video="(PEGAR LINK)" aria-label="Reproducir testimonio 1">▶</button>
-                  </div>
-                  <div class="testimonio-copy"><h3>Testimonio 1</h3><a class="testimonio-salida" href="(PEGAR LINK)" target="_blank" rel="noopener noreferrer">Abrir en YouTube o TikTok ↗</a></div>
-                </article>
-                <article class="testimonio-card">
-                  <div class="testimonio-portada">
-                    <img src="(PEGAR LINK)" alt="Imagen de portada del testimonio 2" loading="lazy" decoding="async" />
-                    <span class="testimonio-portada-placeholder">(PEGAR LINK de imagen de portada)</span>
-                    <button class="testimonio-play" type="button" data-video="(PEGAR LINK)" aria-label="Reproducir testimonio 2">▶</button>
-                  </div>
-                  <div class="testimonio-copy"><h3>Testimonio 2</h3><a class="testimonio-salida" href="(PEGAR LINK)" target="_blank" rel="noopener noreferrer">Abrir en YouTube o TikTok ↗</a></div>
-                </article>
-                <article class="testimonio-card">
-                  <div class="testimonio-portada">
-                    <img src="(PEGAR LINK)" alt="Imagen de portada del testimonio 3" loading="lazy" decoding="async" />
-                    <span class="testimonio-portada-placeholder">(PEGAR LINK de imagen de portada)</span>
-                    <button class="testimonio-play" type="button" data-video="(PEGAR LINK)" aria-label="Reproducir testimonio 3">▶</button>
-                  </div>
-                  <div class="testimonio-copy"><h3>Testimonio 3</h3><a class="testimonio-salida" href="(PEGAR LINK)" target="_blank" rel="noopener noreferrer">Abrir en YouTube o TikTok ↗</a></div>
-                </article>
+                ${videoLinks.map((enlace, indice) => {
+                  const info = obtenerVideoInfo(enlace);
+                  const numero = indice + 1;
+                  const link = escaparHTML(enlace);
+                  const portada = info ? escaparHTML(info.portada) : '';
+                  return `
+                    <article class="testimonio-card">
+                      <div class="testimonio-portada">
+                        <img src="${portada}" alt="Portada automática del testimonio ${numero}" loading="lazy" decoding="async" />
+                        <span class="testimonio-portada-placeholder">Testimonio en video</span>
+                        <button class="testimonio-play" type="button" data-video="${link}" aria-label="Reproducir testimonio ${numero}">▶</button>
+                      </div>
+                      <div class="testimonio-copy">
+                        <h3>Testimonio ${numero}</h3>
+                        <a class="testimonio-salida" href="${link}" target="_blank" rel="noopener noreferrer">Ver en YouTube o TikTok ↗</a>
+                      </div>
+                    </article>`;
+                }).join('')}
               </div>
             </section>`;
 
@@ -93,8 +136,8 @@
               .testimonios-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
               .testimonio-card{min-width:0;overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:18px}
               .testimonio-portada{position:relative;display:grid;place-items:center;aspect-ratio:16/9;overflow:hidden;background:linear-gradient(135deg,#6d4739,#2f1e19);color:#fff}
-              .testimonio-portada img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-              .testimonio-portada img:not([src="(PEGAR LINK)"]){z-index:1}
+              .testimonio-portada img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
+              .testimonio-portada img[src=""]{display:none}
               .testimonio-portada-placeholder{padding:18px;text-align:center;font-size:13px;color:#f6f0e6}
               .testimonio-play{position:absolute;z-index:2;display:grid;place-items:center;width:52px;height:52px;padding-left:4px;border:1px solid rgba(255,255,255,.8);border-radius:50%;background:rgba(47,30,25,.78);color:white;font-size:19px;cursor:pointer}
               .testimonio-play:hover{background:#4c2f26;transform:scale(1.05)}
@@ -117,42 +160,38 @@
             imagen.addEventListener('load', () => {
               imagen.nextElementSibling.hidden = true;
             });
-            if (imagen.getAttribute('src') === '(PEGAR LINK)') imagen.hidden = true;
+            if (!imagen.getAttribute('src')) imagen.hidden = true;
           });
 
-          function obtenerReproductor(enlace) {
-            let url;
-            try { url = new URL(enlace); } catch (error) { return null; }
-            const host = url.hostname.replace(/^www\./, '');
-            let id;
-            if (host === 'youtu.be') {
-              id = url.pathname.split('/').filter(Boolean)[0];
-              return id ? `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1&playsinline=1&rel=0` : null;
+          // TikTok no publica una URL de miniatura predecible; se solicita su portada oEmbed.
+          document.querySelectorAll('.testimonio-play').forEach((boton) => {
+            const info = obtenerVideoInfo(boton.dataset.video);
+            if (info?.plataforma === 'tiktok') {
+              fetch(`https://www.tiktok.com/oembed?url=${encodeURIComponent(boton.dataset.video)}`)
+                .then((respuesta) => respuesta.ok ? respuesta.json() : Promise.reject())
+                .then((datos) => {
+                  if (datos.thumbnail_url) {
+                    const imagen = boton.closest('.testimonio-portada').querySelector('img');
+                    imagen.src = datos.thumbnail_url;
+                    imagen.hidden = false;
+                  }
+                })
+                .catch(() => { /* Si TikTok no ofrece la portada, se conserva la tarjeta gráfica. */ });
             }
-            if (host.endsWith('youtube.com') || host === 'youtube-nocookie.com') {
-              id = url.searchParams.get('v') || url.pathname.match(/\/(?:embed|shorts|live)\/([^/?]+)/)?.[1];
-              return id ? `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1&playsinline=1&rel=0` : null;
-            }
-            if (host.endsWith('tiktok.com')) {
-              id = url.pathname.match(/\/video\/(\d+)/)?.[1];
-              return id ? `https://www.tiktok.com/player/v1/${id}?autoplay=1` : null;
-            }
-            return null;
-          }
+          });
 
           document.querySelectorAll('.testimonio-play').forEach((boton) => {
             boton.addEventListener('click', () => {
               const tarjeta = boton.closest('.testimonio-card');
               const portada = boton.closest('.testimonio-portada');
-              const enlace = boton.dataset.video;
-              const reproductor = obtenerReproductor(enlace);
-              if (!reproductor) {
-                alert('Reemplazá (PEGAR LINK) por un enlace de video de YouTube o TikTok.');
+              const info = obtenerVideoInfo(boton.dataset.video);
+              if (!info) {
+                alert('Pegá un enlace válido de YouTube o TikTok en la lista videoLinks.');
                 return;
               }
               const iframe = document.createElement('iframe');
               iframe.className = 'testimonio-video';
-              iframe.src = reproductor;
+              iframe.src = info.embed;
               iframe.title = tarjeta.querySelector('h3').textContent;
               iframe.loading = 'lazy';
               iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
