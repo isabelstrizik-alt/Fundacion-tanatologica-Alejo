@@ -33,8 +33,12 @@
             "https://www.tiktok.com/@lucianolopryghogene/video/7700752106952609030?is_from_webapp=1&sender_device=pc&web_id=7711473454638532103",
             "https://www.youtube.com/watch?v=I56PPbVTkgI",
             "https://www.tiktok.com/@sincontexto.co/video/7703386514360782101?is_from_webapp=1&sender_device=pc&web_id=7711473454638532103",
-            "https://www.tiktok.com/@maritochavarria17/video/7593092155686587666?is_from_webapp=1&sender_device=pc&web_id=7711473454638532103"
+            "https://www.youtube.com/watch?v=cTu1R8gRf0A"
           ];
+
+          const fragmentos = {
+            6: { inicio: 205, fin: 355 }
+          };
 
           function escaparHTML(valor) {
             return String(valor).replace(/[&<>"']/g, caracter => ({
@@ -42,7 +46,7 @@
             }[caracter]));
           }
 
-          function obtenerVideoInfo(enlace) {
+          function obtenerVideoInfo(enlace, numero) {
             try {
               const url = new URL(enlace);
               const host = url.hostname.replace(/^www\./, '');
@@ -52,11 +56,21 @@
               } else if (host === 'youtube.com' || host === 'm.youtube.com' || host === 'youtube-nocookie.com') {
                 id = url.searchParams.get('v') || url.pathname.match(/\/(?:embed|shorts|live)\/([^/?]+)/)?.[1];
               }
-              if (id) return {
-                plataforma: 'youtube',
-                embed: `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1&playsinline=1&rel=0`,
-                portada: `https://img.youtube.com/vi/${encodeURIComponent(id)}/hqdefault.jpg`
-              };
+              if (id) {
+                const fragmento = fragmentos[numero];
+                const parametros = new URLSearchParams({
+                  autoplay: '1', playsinline: '1', rel: '0'
+                });
+                if (fragmento) {
+                  parametros.set('start', String(fragmento.inicio));
+                  parametros.set('end', String(fragmento.fin));
+                }
+                return {
+                  plataforma: 'youtube',
+                  embed: `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?${parametros.toString()}`,
+                  portada: `https://img.youtube.com/vi/${encodeURIComponent(id)}/hqdefault.jpg`
+                };
+              }
 
               if (host === 'tiktok.com' || host.endsWith('.tiktok.com')) {
                 id = url.pathname.match(/\/video\/(\d+)/)?.[1];
@@ -79,19 +93,20 @@
               </div>
               <div class="testimonios-grid">
                 ${videoLinks.map((enlace, indice) => {
-                  const info = obtenerVideoInfo(enlace);
                   const numero = indice + 1;
+                  const info = obtenerVideoInfo(enlace, numero);
                   const link = escaparHTML(enlace);
                   const portada = info ? escaparHTML(info.portada) : '';
+                  const detalle = numero === 6 ? ' · Fragmento 3:25–5:55' : '';
                   return `
                     <article class="testimonio-card${info?.plataforma === 'tiktok' ? ' testimonio-card-tiktok' : ''}">
                       <div class="testimonio-portada">
                         <img src="${portada}" alt="Portada del testimonio ${numero}" loading="lazy" decoding="async" />
                         <span class="testimonio-portada-placeholder">Testimonio en video</span>
-                        <button class="testimonio-play" type="button" data-video="${link}" aria-label="Reproducir testimonio ${numero}">▶</button>
+                        <button class="testimonio-play" type="button" data-video="${link}" data-numero="${numero}" aria-label="Reproducir testimonio ${numero}">▶</button>
                       </div>
                       <div class="testimonio-copy">
-                        <h3>Testimonio ${numero}</h3>
+                        <h3>Testimonio ${numero}${detalle}</h3>
                         <a class="testimonio-salida" href="${link}" target="_blank" rel="noopener noreferrer">Ver en YouTube o TikTok ↗</a>
                       </div>
                     </article>`;
@@ -156,7 +171,8 @@
           });
 
           document.querySelectorAll('.testimonio-play').forEach((boton) => {
-            const info = obtenerVideoInfo(boton.dataset.video);
+            const numero = Number(boton.dataset.numero);
+            const info = obtenerVideoInfo(boton.dataset.video, numero);
             if (info?.plataforma === 'tiktok') {
               fetch(`https://www.tiktok.com/oembed?url=${encodeURIComponent(boton.dataset.video)}`)
                 .then((respuesta) => respuesta.ok ? respuesta.json() : Promise.reject())
@@ -175,7 +191,8 @@
             boton.addEventListener('click', () => {
               const tarjeta = boton.closest('.testimonio-card');
               const portada = boton.closest('.testimonio-portada');
-              const info = obtenerVideoInfo(boton.dataset.video);
+              const numero = Number(boton.dataset.numero);
+              const info = obtenerVideoInfo(boton.dataset.video, numero);
               if (!info) {
                 alert('Pegá un enlace válido de YouTube o TikTok.');
                 return;
