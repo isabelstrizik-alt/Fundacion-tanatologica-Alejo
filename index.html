@@ -30,13 +30,14 @@
           const videoLinks = [
             "https://www.youtube.com/watch?v=GOPABHQO6X0",
             "https://www.youtube.com/shorts/QiHaCMtTPkM",
-            "https://www.tiktok.com/@lucianolopryghogene/video/7700752106952609030?is_from_webapp=1&sender_device=pc&web_id=7711473454638532103",
+            "https://www.youtube.com/watch?v=9Lody30NRxg",
             "https://www.youtube.com/watch?v=I56PPbVTkgI",
             "https://www.youtube.com/shorts/F08XZYzN-3A",
             "https://www.youtube.com/watch?v=cTu1R8gRf0A"
           ];
 
           const fragmentos = {
+            3: { inicio: 1045, fin: 1196 },
             6: { inicio: 205, fin: 355 }
           };
 
@@ -97,7 +98,8 @@
                   const info = obtenerVideoInfo(enlace, numero);
                   const link = escaparHTML(enlace);
                   const portada = info ? escaparHTML(info.portada) : '';
-                  const detalle = numero === 6 ? ' · Fragmento 3:25–5:55' : '';
+                  const detalle = numero === 3 ? ' · Fragmento 17:25–19:56'
+                    : numero === 6 ? ' · Fragmento 3:25–5:55' : '';
                   return `
                     <article class="testimonio-card${info?.plataforma === 'tiktok' ? ' testimonio-card-tiktok' : ''}">
                       <div class="testimonio-portada">
