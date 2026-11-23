@@ -27,14 +27,13 @@
             html = html.split(placeholder).join(path);
           }
 
-          // Pegá solamente el enlace de cada video en estos seis lugares.
           const videoLinks = [
-            "https://www.youtube.com/watch?v=GOPABHQO6X0", // Video 1
-            "https://www.youtube.com/shorts/QiHaCMtTPkM", // Video 2
-            "https://www.tiktok.com/@lucianolopryghogene/video/7700752106952609030?is_from_webapp=1&sender_device=pc&web_id=7711473454638532103", // Video 3
-            "https://www.youtube.com/watch?v=I56PPbVTkgI", // Video 4
-            "https://www.tiktok.com/@sincontexto.co/video/7703386514360782101?is_from_webapp=1&sender_device=pc&web_id=7711473454638532103", // Video 5
-            "https://www.tiktok.com/@maritochavarria17/video/7593092155686587666?is_from_webapp=1&sender_device=pc&web_id=7711473454638532103"  // Video 6
+            "https://www.youtube.com/watch?v=GOPABHQO6X0",
+            "https://www.youtube.com/shorts/QiHaCMtTPkM",
+            "https://www.tiktok.com/@lucianolopryghogene/video/7700752106952609030?is_from_webapp=1&sender_device=pc&web_id=7711473454638532103",
+            "https://www.youtube.com/watch?v=I56PPbVTkgI",
+            "https://www.tiktok.com/@sincontexto.co/video/7703386514360782101?is_from_webapp=1&sender_device=pc&web_id=7711473454638532103",
+            "https://www.tiktok.com/@maritochavarria17/video/7593092155686587666?is_from_webapp=1&sender_device=pc&web_id=7711473454638532103"
           ];
 
           function escaparHTML(valor) {
@@ -50,29 +49,24 @@
               let id;
               if (host === 'youtu.be') {
                 id = url.pathname.split('/').filter(Boolean)[0];
-                if (id) return {
-                  plataforma: 'youtube',
-                  embed: `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1&playsinline=1&rel=0`,
-                  portada: `https://img.youtube.com/vi/${encodeURIComponent(id)}/hqdefault.jpg`
-                };
-              }
-              if (host === 'youtube.com' || host === 'm.youtube.com' || host === 'youtube-nocookie.com') {
+              } else if (host === 'youtube.com' || host === 'm.youtube.com' || host === 'youtube-nocookie.com') {
                 id = url.searchParams.get('v') || url.pathname.match(/\/(?:embed|shorts|live)\/([^/?]+)/)?.[1];
-                if (id) return {
-                  plataforma: 'youtube',
-                  embed: `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1&playsinline=1&rel=0`,
-                  portada: `https://img.youtube.com/vi/${encodeURIComponent(id)}/hqdefault.jpg`
-                };
               }
+              if (id) return {
+                plataforma: 'youtube',
+                embed: `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1&playsinline=1&rel=0`,
+                portada: `https://img.youtube.com/vi/${encodeURIComponent(id)}/hqdefault.jpg`
+              };
+
               if (host === 'tiktok.com' || host.endsWith('.tiktok.com')) {
                 id = url.pathname.match(/\/video\/(\d+)/)?.[1];
                 if (id) return {
                   plataforma: 'tiktok',
-                  embed: `https://www.tiktok.com/player/v1/${id}?autoplay=1`,
+                  embed: `https://www.tiktok.com/player/v1/${id}?controls=1&autoplay=1&music_info=1&description=1&volume_control=1&fullscreen_button=1&loop=1`,
                   portada: ''
                 };
               }
-            } catch (error) { /* Enlace vacío o con formato no válido. */ }
+            } catch (error) { /* Enlace vacío o no válido. */ }
             return null;
           }
 
@@ -90,9 +84,9 @@
                   const link = escaparHTML(enlace);
                   const portada = info ? escaparHTML(info.portada) : '';
                   return `
-                    <article class="testimonio-card">
+                    <article class="testimonio-card${info?.plataforma === 'tiktok' ? ' testimonio-card-tiktok' : ''}">
                       <div class="testimonio-portada">
-                        <img src="${portada}" alt="Portada automática del testimonio ${numero}" loading="lazy" decoding="async" />
+                        <img src="${portada}" alt="Portada del testimonio ${numero}" loading="lazy" decoding="async" />
                         <span class="testimonio-portada-placeholder">Testimonio en video</span>
                         <button class="testimonio-play" type="button" data-video="${link}" aria-label="Reproducir testimonio ${numero}">▶</button>
                       </div>
@@ -105,19 +99,16 @@
               </div>
             </section>`;
 
-          // Agrega la nueva sección debajo de “Nuestra mirada”, sin reemplazar el contenido existente.
           html = html.replace(
             /(<h3>Nuestra mirada<\/h3>[\s\S]*?<\/div>\s*<\/div>)(\s*<\/div>\s*<div class="team-column">)/,
             `$1${testimonios}$2`
           );
 
-          // Inserta el logo circular en la marca del encabezado.
           html = html.replace(
             '<div class="brand-mark">A</div>',
             '<div class="brand-mark"><img src="img/Logo%20circular.png" alt="Logo de Fundación Tanatológica Alejo" /></div>'
           );
 
-          // Sustituye todo el SVG anterior de la tarjeta por el archivo de logo circular.
           html = html.replace(
             /<svg class="identity-logo"[\s\S]*?<\/svg>/,
             '<img class="identity-logo" src="img/Logo%20circular.png" alt="Logo de Fundación Tanatológica Alejo" />'
@@ -139,6 +130,7 @@
               .testimonios-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
               .testimonio-card{min-width:0;overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 8px 22px rgba(76,47,38,.08)}
               .testimonio-portada{position:relative;display:grid;place-items:center;aspect-ratio:16/9;overflow:hidden;background:linear-gradient(135deg,#6d4739,#2f1e19);color:#fff}
+              .testimonio-card-tiktok .testimonio-portada{max-width:340px;width:100%;aspect-ratio:9/16;margin-inline:auto;background:#201613}
               .testimonio-portada img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
               .testimonio-portada img[src=""]{display:none}
               .testimonio-portada-placeholder{padding:18px;text-align:center;font-size:13px;color:#f6f0e6}
@@ -149,8 +141,7 @@
               .testimonio-copy{padding:18px 20px}
               .testimonio-copy h3{margin:0 0 7px;font:500 23px Georgia,serif;color:var(--chocolate)}
               .testimonio-salida{font-size:14px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
-              @media(min-width:901px){.testimonios-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}}
-              @media(max-width:620px){body{background-attachment:scroll!important}.testimonios{padding:22px}.testimonios-grid{grid-template-columns:1fr;gap:18px}.testimonio-copy{padding:16px}}
+              @media(max-width:620px){body{background-attachment:scroll!important}.testimonios{padding:22px}.testimonios-grid{grid-template-columns:1fr;gap:18px}.testimonio-copy{padding:16px}.testimonio-card-tiktok .testimonio-portada{max-width:300px}}
             </style></head>`
           );
 
@@ -160,13 +151,10 @@
 
           document.querySelectorAll('.testimonio-portada img').forEach((imagen) => {
             imagen.addEventListener('error', () => { imagen.hidden = true; });
-            imagen.addEventListener('load', () => {
-              imagen.nextElementSibling.hidden = true;
-            });
+            imagen.addEventListener('load', () => { imagen.nextElementSibling.hidden = true; });
             if (!imagen.getAttribute('src')) imagen.hidden = true;
           });
 
-          // TikTok no publica una URL de miniatura predecible; se solicita su portada oEmbed.
           document.querySelectorAll('.testimonio-play').forEach((boton) => {
             const info = obtenerVideoInfo(boton.dataset.video);
             if (info?.plataforma === 'tiktok') {
@@ -179,7 +167,7 @@
                     imagen.hidden = false;
                   }
                 })
-                .catch(() => { /* Si TikTok no ofrece la portada, se conserva la tarjeta gráfica. */ });
+                .catch(() => {});
             }
           });
 
@@ -189,7 +177,7 @@
               const portada = boton.closest('.testimonio-portada');
               const info = obtenerVideoInfo(boton.dataset.video);
               if (!info) {
-                alert('Pegá un enlace válido de YouTube o TikTok en la lista videoLinks.');
+                alert('Pegá un enlace válido de YouTube o TikTok.');
                 return;
               }
               const iframe = document.createElement('iframe');
@@ -197,12 +185,21 @@
               iframe.src = info.embed;
               iframe.title = tarjeta.querySelector('h3').textContent;
               iframe.loading = 'lazy';
-              iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+              iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share';
               iframe.allowFullscreen = true;
               iframe.referrerPolicy = 'strict-origin-when-cross-origin';
               portada.replaceChildren(iframe);
             });
           });
+
+          const audio = document.querySelector('#musicaFondo');
+          const source = audio?.querySelector('source');
+          if (source) source.src = 'img/Disturbed%20%20-%20The%20Sound%20Of%20Silence%20(Official%20Music%20Video)%20%5B4K%20UPGRADE%5D%20-%20Disturbed.mp3';
+          if (audio) {
+            audio.loop = true;
+            audio.preload = 'auto';
+            audio.load();
+          }
         })
         .catch((error) => {
           document.getElementById("status").textContent = error.message;
