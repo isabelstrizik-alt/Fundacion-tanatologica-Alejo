@@ -150,12 +150,18 @@
               body{background-color:var(--ivory)!important;background-image:linear-gradient(rgba(246,240,230,.72),rgba(246,240,230,.72)),url("img/fondo-reconocimientos.jpg")!important;background-position:center center!important;background-size:cover!important;background-attachment:fixed!important}
               .services{background-color:rgba(241,232,218,.76)!important}
               .quote-band{background-color:rgba(255,250,243,.78)!important}
-              @media(min-width:901px){.foundation-layout{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;align-items:stretch!important}.team-column{align-content:stretch;grid-auto-rows:1fr}}
-              .testimonios{display:block;width:100%;max-width:100%;min-width:0;margin-top:22px;padding:24px;background:var(--paper);border:1px solid rgba(185,154,94,.42);border-radius:24px;box-shadow:var(--shadow)}
+              /* La columna izquierda ocupa la misma altura que la columna de perfiles. */
+              @media(min-width:901px){
+                .foundation-layout{grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr)!important;align-items:stretch!important}
+                .foundation-layout>div:first-child{display:flex;flex-direction:column;min-width:0}
+                .foundation-layout>.team-column{align-content:start;grid-auto-rows:auto}
+                .foundation-layout>div:first-child>.testimonios{flex:1 0 auto}
+              }
+              .testimonios{display:flex;flex-direction:column;width:100%;max-width:100%;min-width:0;margin-top:22px;padding:24px;background:var(--paper);border:1px solid rgba(185,154,94,.42);border-radius:24px;box-shadow:var(--shadow)}
               .testimonios-encabezado{max-width:760px;margin-bottom:20px}
               .testimonios-titulo{font-family:Georgia,serif;color:var(--chocolate);font-size:clamp(30px,4vw,40px);line-height:1.15;font-weight:500;margin:0 0 10px}
               .testimonios-encabezado p{color:var(--muted);margin:0}
-              .testimonios-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+              .testimonios-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-content:space-between}
               .testimonio-card{min-width:0;overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 8px 22px rgba(76,47,38,.08)}
               .testimonio-portada{position:relative;display:grid;place-items:center;aspect-ratio:16/9;overflow:hidden;background:linear-gradient(135deg,#6d4739,#2f1e19);color:#fff}
               .testimonio-card-tiktok .testimonio-portada{max-width:340px;width:100%;aspect-ratio:9/16;margin-inline:auto;background:#201613}
@@ -171,7 +177,7 @@
               .testimonio-salida{font-size:14px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
               #voces{padding:20px 0 28px!important}
               #voces details{box-shadow:0 12px 28px rgba(76,47,38,.05)}
-              @media(max-width:900px){.foundation-layout{align-items:start!important}.team-column{grid-auto-rows:auto}}
+              @media(max-width:900px){.foundation-layout{align-items:start!important}.foundation-layout>div:first-child{display:block}.testimonios{flex:none}}
               @media(max-width:620px){body{background-attachment:scroll!important}.testimonios{padding:22px}.testimonios-grid{grid-template-columns:1fr;gap:18px}.testimonio-copy{padding:16px}.testimonio-card-tiktok .testimonio-portada{max-width:300px}}
             </style></head>`
           );
