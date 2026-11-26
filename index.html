@@ -15,221 +15,47 @@
           return response.text();
         })
         .then((html) => {
-          const imageLinks = [
+          const replacements = [
             ["data:image/jpeg;base64,(logo circular)", "img/Logo%20circular.png"],
+            ["data:image/jpeg;base64,(logo fundacion)", "img/Logo%20circular.png"],
             ["data:image/png;base64,(Foto Isabel Elisa Strik)", "img/Isabel%20Elisa%20Strizik.png"],
             ["data:image/png;base64,(foto Agustin Kpsspy Strizik)", "img/Agustin%20Kossoy%20Strizik.png"],
             ["data:image/png;base64,(foto Denis Bulan)", "img/Denis%20Bulan.png"],
             ["data:image/png;base64,)foto Alejo)", "img/Alejo.png"]
           ];
 
-          for (const [placeholder, path] of imageLinks) {
+          for (const [placeholder, path] of replacements) {
             html = html.split(placeholder).join(path);
-          }
-
-          const videoLinks = [
-            "https://www.youtube.com/watch?v=GOPABHQO6X0",
-            "https://www.youtube.com/shorts/QiHaCMtTPkM",
-            "https://www.youtube.com/watch?v=9Lody30NRxg",
-            "https://www.youtube.com/watch?v=I56PPbVTkgI",
-            "https://www.youtube.com/shorts/F08XZYzN-3A",
-            "https://www.youtube.com/watch?v=cTu1R8gRf0A",
-            "https://www.youtube.com/shorts/MKpnvCxU2zA",
-            "https://www.youtube.com/watch?v=1tHjmeY23Lc"
-          ];
-
-          const fragmentos = {
-            3: { inicio: 1045, fin: 1196 },
-            6: { inicio: 205, fin: 355 }
-          };
-
-          function escaparHTML(valor) {
-            return String(valor).replace(/[&<>"']/g, caracter => ({
-              '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-            }[caracter]));
-          }
-
-          function obtenerVideoInfo(enlace, numero) {
-            try {
-              const url = new URL(enlace);
-              const host = url.hostname.replace(/^www\./, '');
-              let id;
-              if (host === 'youtu.be') {
-                id = url.pathname.split('/').filter(Boolean)[0];
-              } else if (host === 'youtube.com' || host === 'm.youtube.com' || host === 'youtube-nocookie.com') {
-                id = url.searchParams.get('v') || url.pathname.match(/\/(?:embed|shorts|live)\/([^/?]+)/)?.[1];
-              }
-              if (id) {
-                const fragmento = fragmentos[numero];
-                const parametros = new URLSearchParams({ autoplay: '1', playsinline: '1', rel: '0' });
-                if (fragmento) {
-                  parametros.set('start', String(fragmento.inicio));
-                  parametros.set('end', String(fragmento.fin));
-                }
-                return {
-                  plataforma: 'youtube',
-                  embed: `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?${parametros.toString()}`,
-                  portada: `https://img.youtube.com/vi/${encodeURIComponent(id)}/hqdefault.jpg`
-                };
-              }
-
-              if (host === 'tiktok.com' || host.endsWith('.tiktok.com')) {
-                id = url.pathname.match(/\/video\/(\d+)/)?.[1];
-                if (id) return {
-                  plataforma: 'tiktok',
-                  embed: `https://www.tiktok.com/player/v1/${id}?controls=1&autoplay=1&music_info=1&description=1&volume_control=1&fullscreen_button=1&loop=1`,
-                  portada: ''
-                };
-              }
-            } catch (error) { /* Enlace vacío o no válido. */ }
-            return null;
-          }
-
-          const testimonios = `
-            <section class="testimonios" aria-labelledby="testimonios-titulo">
-              <div class="testimonios-encabezado">
-                <div class="section-kicker">Testimonios</div>
-                <h2 class="testimonios-titulo" id="testimonios-titulo">Así seguimos viviendo</h2>
-                <p>Historias de familias que encuentran maneras de seguir viviendo y llevando consigo el amor.</p>
-              </div>
-              <div class="testimonios-grid">
-                ${videoLinks.map((enlace, indice) => {
-                  const numero = indice + 1;
-                  const info = obtenerVideoInfo(enlace, numero);
-                  const link = escaparHTML(enlace);
-                  const portada = info ? escaparHTML(info.portada) : '';
-                  const detalle = numero === 3 ? ' · Fragmento 17:25–19:56'
-                    : numero === 6 ? ' · Fragmento 3:25–5:55' : '';
-                  return `
-                    <article class="testimonio-card${info?.plataforma === 'tiktok' ? ' testimonio-card-tiktok' : ''}">
-                      <div class="testimonio-portada">
-                        <img src="${portada}" alt="Portada del testimonio ${numero}" loading="lazy" decoding="async" />
-                        <span class="testimonio-portada-placeholder">Testimonio en video</span>
-                        <button class="testimonio-play" type="button" data-video="${link}" data-numero="${numero}" aria-label="Reproducir testimonio ${numero}">▶</button>
-                      </div>
-                      <div class="testimonio-copy">
-                        <h3>Testimonio ${numero}${detalle}</h3>
-                        <a class="testimonio-salida" href="${link}" target="_blank" rel="noopener noreferrer">Ver en YouTube o TikTok ↗</a>
-                      </div>
-                    </article>`;
-                }).join('')}
-              </div>
-            </section>`;
-
-          html = html.replace(
-            /(<h3>Nuestra mirada<\/h3>[\s\S]*?<\/div>\s*<\/div>)(\s*<\/div>\s*<div class="team-column">)/,
-            `$1${testimonios}$2`
-          );
-
-          // Ubica el panel de Voces antes de la sección de acompañamiento.
-          const voces = html.match(/<section id="voces"[\s\S]*?<\/section>/);
-          if (voces) {
-            html = html.replace(voces[0], '');
-            html = html.replace(
-              /(?=<section class="services" id="acompanamiento">)/,
-              `${voces[0]}\n`
-            );
           }
 
           html = html.replace(
             '<div class="brand-mark">A</div>',
             '<div class="brand-mark"><img src="img/Logo%20circular.png" alt="Logo de Fundación Tanatológica Alejo" /></div>'
           );
-
           html = html.replace(
             /<svg class="identity-logo"[\s\S]*?<\/svg>/,
             '<img class="identity-logo" src="img/Logo%20circular.png" alt="Logo de Fundación Tanatológica Alejo" />'
           );
-
+          html = html.replace(
+            '<div class="contact-item"><strong>WhatsApp:</strong> próximamente</div>',
+            '<div class="contact-item"><strong>WhatsApp:</strong> <a href="https://wa.me/5493644409611" target="_blank" rel="noopener noreferrer">+54 9 3644 409611</a></div>'
+          );
+          html = html.replace(
+            '<div class="contact-item"><strong>Correo:</strong> próximamente</div>',
+            '<div class="contact-item"><strong>Correo:</strong> <a href="mailto:fta@fundaciontanatologicaalejo.org">fta@fundaciontanatologicaalejo.org</a></div>'
+          );
           html = html.replace(
             "</head>",
             `<style>
               .brand-mark{padding:3px;overflow:hidden}
               .brand-mark img{display:block;width:100%;height:100%;object-fit:contain;border-radius:50%}
               .identity-logo{object-fit:contain}
-              body{background-color:var(--ivory)!important;background-image:linear-gradient(rgba(246,240,230,.72),rgba(246,240,230,.72)),url("img/fondo-reconocimientos.jpg")!important;background-position:center center!important;background-size:cover!important;background-attachment:fixed!important}
-              .services{background-color:rgba(241,232,218,.76)!important}
-              .quote-band{background-color:rgba(255,250,243,.78)!important}
-              /* La columna izquierda ocupa la misma altura que la columna de perfiles. */
-              @media(min-width:901px){
-                .foundation-layout{grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr)!important;align-items:stretch!important}
-                .foundation-layout>div:first-child{display:flex;flex-direction:column;min-width:0}
-                .foundation-layout>.team-column{align-content:start;grid-auto-rows:auto}
-                .foundation-layout>div:first-child>.testimonios{flex:1 0 auto}
-              }
-              .testimonios{display:flex;flex-direction:column;width:100%;max-width:100%;min-width:0;margin-top:22px;padding:24px;background:var(--paper);border:1px solid rgba(185,154,94,.42);border-radius:24px;box-shadow:var(--shadow)}
-              .testimonios-encabezado{max-width:760px;margin-bottom:20px}
-              .testimonios-titulo{font-family:Georgia,serif;color:var(--chocolate);font-size:clamp(30px,4vw,40px);line-height:1.15;font-weight:500;margin:0 0 10px}
-              .testimonios-encabezado p{color:var(--muted);margin:0}
-              .testimonios-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-content:space-between}
-              .testimonio-card{min-width:0;overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 8px 22px rgba(76,47,38,.08)}
-              .testimonio-portada{position:relative;display:grid;place-items:center;aspect-ratio:16/9;overflow:hidden;background:linear-gradient(135deg,#6d4739,#2f1e19);color:#fff}
-              .testimonio-card-tiktok .testimonio-portada{max-width:340px;width:100%;aspect-ratio:9/16;margin-inline:auto;background:#201613}
-              .testimonio-portada img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
-              .testimonio-portada img[src=""]{display:none}
-              .testimonio-portada-placeholder{padding:18px;text-align:center;font-size:13px;color:#f6f0e6}
-              .testimonio-play{position:absolute;z-index:2;display:grid;place-items:center;width:60px;height:60px;padding-left:4px;border:1px solid rgba(255,255,255,.8);border-radius:50%;background:rgba(47,30,25,.78);color:white;font-size:22px;cursor:pointer}
-              .testimonio-play:hover{background:#4c2f26;transform:scale(1.05)}
-              .testimonio-play:focus-visible,.testimonio-salida:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
-              .testimonio-video{position:absolute;inset:0;width:100%;height:100%;border:0;background:#201613}
-              .testimonio-copy{padding:18px 20px}
-              .testimonio-copy h3{margin:0 0 7px;font:500 23px Georgia,serif;color:var(--chocolate)}
-              .testimonio-salida{font-size:14px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
-              #voces{padding:20px 0 28px!important}
-              #voces details{box-shadow:0 12px 28px rgba(76,47,38,.05)}
-              @media(max-width:900px){.foundation-layout{align-items:start!important}.foundation-layout>div:first-child{display:block}.testimonios{flex:none}}
-              @media(max-width:620px){body{background-attachment:scroll!important}.testimonios{padding:22px}.testimonios-grid{grid-template-columns:1fr;gap:18px}.testimonio-copy{padding:16px}.testimonio-card-tiktok .testimonio-portada{max-width:300px}}
             </style></head>`
           );
 
           document.open();
           document.write(html);
           document.close();
-
-          document.querySelectorAll('.testimonio-portada img').forEach((imagen) => {
-            imagen.addEventListener('error', () => { imagen.hidden = true; });
-            imagen.addEventListener('load', () => { imagen.nextElementSibling.hidden = true; });
-            if (!imagen.getAttribute('src')) imagen.hidden = true;
-          });
-
-          document.querySelectorAll('.testimonio-play').forEach((boton) => {
-            const numero = Number(boton.dataset.numero);
-            const info = obtenerVideoInfo(boton.dataset.video, numero);
-            if (info?.plataforma === 'tiktok') {
-              fetch(`https://www.tiktok.com/oembed?url=${encodeURIComponent(boton.dataset.video)}`)
-                .then((respuesta) => respuesta.ok ? respuesta.json() : Promise.reject())
-                .then((datos) => {
-                  if (datos.thumbnail_url) {
-                    const imagen = boton.closest('.testimonio-portada').querySelector('img');
-                    imagen.src = datos.thumbnail_url;
-                    imagen.hidden = false;
-                  }
-                })
-                .catch(() => {});
-            }
-          });
-
-          document.querySelectorAll('.testimonio-play').forEach((boton) => {
-            boton.addEventListener('click', () => {
-              const tarjeta = boton.closest('.testimonio-card');
-              const portada = boton.closest('.testimonio-portada');
-              const numero = Number(boton.dataset.numero);
-              const info = obtenerVideoInfo(boton.dataset.video, numero);
-              if (!info) {
-                alert('Pegá un enlace válido de YouTube o TikTok.');
-                return;
-              }
-              const iframe = document.createElement('iframe');
-              iframe.className = 'testimonio-video';
-              iframe.src = info.embed;
-              iframe.title = tarjeta.querySelector('h3').textContent;
-              iframe.loading = 'lazy';
-              iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture; web-share';
-              iframe.allowFullscreen = true;
-              iframe.referrerPolicy = 'strict-origin-when-cross-origin';
-              portada.replaceChildren(iframe);
-            });
-          });
 
           const audio = document.querySelector('#musicaFondo');
           const source = audio?.querySelector('source');
