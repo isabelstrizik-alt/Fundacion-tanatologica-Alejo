@@ -45,17 +45,46 @@
             '<div class="contact-item"><strong>Correo:</strong> <a href="mailto:fta@fundaciontanatologicaalejo.org">fta@fundaciontanatologicaalejo.org</a></div>'
           );
           html = html.replace(
+            `<div class="actions" style="margin-top:24px">
+             <a class="btn btn-primary" href="#contacto">Quiero recibir novedades</a>
+           </div>`,
+            `<form id="novedadesForm" class="novedades-form">
+              <label for="novedadesEmail">Tu correo electrónico</label>
+              <input id="novedadesEmail" name="email" type="email" autocomplete="email" placeholder="nombre@ejemplo.com" required />
+              <p class="novedades-ayuda">Al continuar, se abrirá tu aplicación de correo para que confirmes el envío.</p>
+              <button class="btn btn-primary" type="submit">Quiero recibir novedades</button>
+            </form>`
+          );
+          html = html.replace(
             "</head>",
             `<style>
               .brand-mark{padding:3px;overflow:hidden}
               .brand-mark img{display:block;width:100%;height:100%;object-fit:contain;border-radius:50%}
               .identity-logo{object-fit:contain}
+              .novedades-form{display:grid;gap:10px;margin-top:24px}
+              .novedades-form label{font-weight:700;color:var(--chocolate)}
+              .novedades-form input{width:100%;min-height:48px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fffaf4;color:var(--ink);font:inherit}
+              .novedades-form input:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+              .novedades-ayuda{margin:0 0 6px;color:var(--muted);font-size:13px}
+              .novedades-form button{justify-self:start;cursor:pointer}
             </style></head>`
           );
 
           document.open();
           document.write(html);
           document.close();
+
+          document.getElementById('novedadesForm')?.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const campoEmail = document.getElementById('novedadesEmail');
+            if (!campoEmail.reportValidity()) return;
+
+            const asunto = encodeURIComponent('Solicitud para recibir novedades');
+            const mensaje = encodeURIComponent(
+              `Por favor, agregar este correo a la lista de novedades de la Fundación:\n${campoEmail.value.trim()}`
+            );
+            window.location.href = `mailto:fta@fundaciontanatologicaalejo.org?subject=${asunto}&body=${mensaje}`;
+          });
 
           const audio = document.querySelector('#musicaFondo');
           const source = audio?.querySelector('source');
