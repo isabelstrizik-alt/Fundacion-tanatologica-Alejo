@@ -33,7 +33,9 @@
             "https://www.youtube.com/watch?v=9Lody30NRxg",
             "https://www.youtube.com/watch?v=I56PPbVTkgI",
             "https://www.youtube.com/shorts/F08XZYzN-3A",
-            "https://www.youtube.com/watch?v=cTu1R8gRf0A"
+            "https://www.youtube.com/watch?v=cTu1R8gRf0A",
+            "https://www.youtube.com/shorts/MKpnvCxU2zA",
+            "https://www.youtube.com/watch?v=1tHjmeY23Lc"
           ];
 
           const fragmentos = {
@@ -59,9 +61,7 @@
               }
               if (id) {
                 const fragmento = fragmentos[numero];
-                const parametros = new URLSearchParams({
-                  autoplay: '1', playsinline: '1', rel: '0'
-                });
+                const parametros = new URLSearchParams({ autoplay: '1', playsinline: '1', rel: '0' });
                 if (fragmento) {
                   parametros.set('start', String(fragmento.inicio));
                   parametros.set('end', String(fragmento.fin));
